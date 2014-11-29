@@ -1,11 +1,6 @@
 require 'rspec'
 require './lib/conmay.rb'
 
-describe "me" do
-  subject { me }
-  it { should == 'alive' }
-end
-
 describe "neighbour counting interface" do
 
   before { @cell = Cell.new }

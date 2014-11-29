@@ -1,12 +1,3 @@
-def me
-  'alive'
-end
-
-def num_neighbours_alive
-  2
-end
-
-
 class Cell
 
   def initialize
