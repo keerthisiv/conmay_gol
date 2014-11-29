@@ -8,24 +8,6 @@ end
 
 describe "neighbour counting interface" do
 
-  def alive_cell
-    cell = Cell.new
-    cell.state = "alive"
-    cell
-  end
-
-  def empty_cell
-    cell = Cell.new
-    cell.state = "empty"
-    cell
-  end
-
-  def dead_cell
-    cell = Cell.new
-    cell.state = "dead"
-    cell
-  end
-
   before { @cell = Cell.new }
   subject { @cell.num_neighbours_alive }
 
@@ -79,5 +61,92 @@ describe "neighbours interface" do
     subject { @cell1.neighbours }
     it { should == [@cell2, @cell3] }
   end
+end
 
+def alive_cell
+  cell = Cell.new
+  cell.state = "alive"
+  cell
+end
+
+def empty_cell
+  cell = Cell.new
+  cell.state = "empty"
+  cell
+end
+
+def dead_cell
+  cell = Cell.new
+  cell.state = "dead"
+  cell
+end
+
+describe "tick! interface" do
+  before do
+    @cell = Cell.new 
+  end
+
+  subject { @cell.state }
+
+  context "less than two neighbours" do
+    before do 
+      @cell.state = "alive"
+      @cell.tick! 
+    end
+
+    it { should == "dead" }
+  end
+
+  context"two or three live neighbours" do
+    context "alive" do
+      before { @cell.state = "alive" }
+
+      context "two" do
+        before do 
+          @cell.add_neighbours(alive_cell, alive_cell, dead_cell, empty_cell)
+          @cell.tick!
+        end
+        it { should == "alive" }
+      end
+
+      context "three" do
+        before do 
+          @cell.add_neighbours(alive_cell, alive_cell, dead_cell, empty_cell, alive_cell)
+          @cell.tick!
+        end
+        it { should == "alive" }
+      end
+    end
+  end
+ 
+  context "more than three alive neigbours" do
+    before do 
+      @cell.add_neighbours(alive_cell, alive_cell, alive_cell, alive_cell, dead_cell, empty_cell)
+      @cell.state = "alive"
+      @cell.tick!
+    end
+    
+    subject { @cell.state } 
+    it { should == "dead" }
+  end
+
+  context "exactly three live neighbours" do
+    before { @cell.add_neighbours(alive_cell, alive_cell, alive_cell, dead_cell, empty_cell) }
+    subject { @cell.state } 
+    context "alive" do
+      before do
+        @cell.state = "alive"
+        @cell.tick!
+      end
+      it { should == "alive" }
+    end
+    
+    context "dead" do
+      before do
+        @cell.state = "dead"
+        @cell.tick!
+      end
+      it { should == "alive" }
+    end
+  end
 end

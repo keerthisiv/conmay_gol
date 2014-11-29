@@ -8,6 +8,18 @@ end
 
 
 class Cell
+
+  def initialize
+    @neighbours = []
+  end
+  
+  def tick!
+    if num_neighbours_alive.between?(2,3)
+      self.state = "alive"
+    else 
+      self.state = "dead"
+    end
+  end
  
   def state=(state)
     @state = state
@@ -18,7 +30,6 @@ class Cell
   end
 
   def add_neighbours(*cells)
-    @neighbours ||= []
     @neighbours += cells
   end
 
