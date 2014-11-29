@@ -20,6 +20,12 @@ describe "neighbour counting interface" do
     cell
   end
 
+  def dead_cell
+    cell = Cell.new
+    cell.state = "dead"
+    cell
+  end
+
   before { @cell = Cell.new }
   subject { @cell.num_neighbours_alive }
 
@@ -28,9 +34,9 @@ describe "neighbour counting interface" do
     it { should == 0 } 
   end
 
-  context "1 alive neighbouring cell" do
-    before { @cell.add_neighbours(alive_cell, empty_cell) }
-    it { should == 1 } 
+  context "2 alive neighbouring cells" do
+    before { @cell.add_neighbours(alive_cell, empty_cell, empty_cell, alive_cell, dead_cell) }
+    it { should == 2 } 
   end
 end
 
